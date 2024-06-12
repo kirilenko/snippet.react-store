@@ -3,6 +3,7 @@ import { Global } from '@emotion/react'
 
 import { env } from '@app/config'
 import { ContextCounters } from '@modules/context-counters'
+import { ReduxCounters } from '@modules/redux-counters'
 import { StoreCounters } from '@modules/store-counters'
 
 import './styles/tailwind.css'
@@ -32,6 +33,12 @@ const App: FC = () => (
         context).
       </p>
       <ContextCounters />
+      <p className="mt-4 text-xs">
+        This is using of the redux w/ independent fields (a changing some field
+        does not trigger a re-render of the component who depended on another
+        field of the store).
+      </p>
+      <ReduxCounters />
     </AppStyle>
     <span className="hidden">{env.VITE_TIMESTAMP}</span>
   </>
