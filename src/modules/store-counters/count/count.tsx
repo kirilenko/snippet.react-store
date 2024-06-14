@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { State, useStoreSnapshot } from '../store-counters.store'
+import { State, useSnapshot } from '../store-counters.store'
 
 type CountProps = {
   stateFieldName: keyof State
@@ -13,7 +13,7 @@ export const Count: FC<CountProps> = ({ stateFieldName }) => {
     <div className="m-4">
       {stateFieldName}:{' '}
       <span className="text-blue-500">
-        {useStoreSnapshot((state) => state[stateFieldName])}
+        {useSnapshot((state) => state[stateFieldName])}
       </span>
     </div>
   )

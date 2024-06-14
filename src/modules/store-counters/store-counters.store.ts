@@ -1,32 +1,4 @@
-import { useSyncExternalStore } from 'react'
-
-type Listener<State extends Record<string, unknown>> = (state: State) => void
-
-type Store<State extends Record<string, unknown>> = {
-  getState: () => State
-  setState: (newState: State) => void
-  subscribe: (listener: Listener<State>) => () => boolean
-}
-
-const createStore = <State extends Record<string, unknown>>(
-  initialState: State,
-): Store<State> => {
-  let currentState = initialState
-
-  const listeners = new Set<Listener<State>>()
-
-  return {
-    getState: () => currentState,
-    setState: (newState) => {
-      currentState = newState
-      listeners.forEach((listener) => listener(currentState))
-    },
-    subscribe: (listener) => {
-      listeners.add(listener)
-      return () => listeners.delete(listener)
-    },
-  }
-}
+import { createStore, snapshotHookCreator } from '@shared/store'
 
 export type State = {
   value1: number
@@ -40,9 +12,4 @@ const initialState: State = {
 
 export const store = createStore<State>(initialState)
 
-type UseStoreSnapshot<S extends Record<string, unknown>> = (
-  getSnapshot: (state: S) => S[keyof S],
-) => S[keyof S]
-
-export const useStoreSnapshot: UseStoreSnapshot<State> = (getSnapshot) =>
-  useSyncExternalStore(store.subscribe, () => getSnapshot(store.getState()))
+export const useSnapshot = snapshotHookCreator<State>(store)

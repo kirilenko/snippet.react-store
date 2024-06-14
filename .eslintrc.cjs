@@ -43,7 +43,7 @@ const rules = {
         '@app/**/*',
         '@entities/**/*', // use @entities/something only
         '@modules/**/*', // use @modules/something only
-        '@shared/!(lib|ui)/**/*',
+        '@shared/**/*', // use @shared/something only
       ],
     },
   ], // - for local import only from fsd-index (features sliced design)
