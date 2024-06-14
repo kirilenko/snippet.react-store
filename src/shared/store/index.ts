@@ -1,1 +1,5 @@
-export { createStore, snapshotHookCreator } from './store'
+export {
+  createStore,
+  snapshotHookCreator,
+  snapshot17HookCreator,
+} from './store'

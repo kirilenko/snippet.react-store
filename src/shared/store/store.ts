@@ -1,13 +1,13 @@
-import { useSyncExternalStore } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 
 type S = Record<string, unknown>
 
 type Listener<State extends S> = (state: State) => void
 
-type Store<State extends Record<string, unknown>> = {
+type Store<State extends S> = {
   getState: () => State
   setState: (newState: State) => void
-  subscribe: (listener: Listener<State>) => () => boolean
+  subscribe: (listener: Listener<State>) => () => void
 }
 
 export const createStore = <State extends S>(
@@ -18,7 +18,7 @@ export const createStore = <State extends S>(
   const listeners = new Set<Listener<State>>()
 
   return {
-    getState: () => currentState,
+    getState: (): State => currentState,
     setState: (newState) => {
       currentState = newState
       listeners.forEach((listener) => listener(currentState))
@@ -38,7 +38,25 @@ type UseSnapshot<State extends S> = (
   getSnapshot: GetSnapshot<State>,
 ) => Snapshot<State>
 
+// required React >= 18:
 export const snapshotHookCreator = <State extends S>(
   store: Store<State>,
 ): UseSnapshot<State> => (getSnapshot) =>
   useSyncExternalStore(store.subscribe, () => getSnapshot(store.getState()))
+
+// for React < 18:
+export const snapshot17HookCreator = <State extends S>(
+  store: Store<State>,
+): UseSnapshot<State> => (getSnapshot) => {
+  const [snapshot, setSnapshot] = useState<Snapshot<State>>(
+    getSnapshot(store.getState()),
+  )
+
+  useEffect(
+    () =>
+      store.subscribe((currentState) => setSnapshot(getSnapshot(currentState))),
+    [getSnapshot],
+  )
+
+  return snapshot
+}
