@@ -6,9 +6,10 @@ const envConfig: Record<EnvKey, 'boolean' | 'number' | 'string'> = {
   VITE_TIMESTAMP: 'string',
 }
 
-const env: Record<EnvKey, boolean | null | number | string> = Object.keys(
-  envConfig,
-).reduce((acc, key) => {
+export const env: Record<
+  EnvKey,
+  boolean | null | number | string
+> = Object.keys(envConfig).reduce((acc, key) => {
   const type = envConfig[key as EnvKey]
   const value = import.meta.env[key as EnvKey] ?? null
   if (value === null) {
@@ -29,5 +30,3 @@ const env: Record<EnvKey, boolean | null | number | string> = Object.keys(
       return { ...acc, [key]: value }
   }
 }, {} as Record<EnvKey, boolean | null | number | string>)
-
-export default env
