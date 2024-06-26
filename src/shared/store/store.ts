@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react'
 
 type S = Record<string, unknown>
 
@@ -32,31 +32,36 @@ export const createStore = <State extends S>(
 
 type Snapshot<State extends S> = State[keyof State]
 
-type GetSnapshot<State extends S> = (state: State) => Snapshot<State>
-
 type UseSnapshot<State extends S> = (
-  getSnapshot: GetSnapshot<State>,
+  stateFieldName: keyof State,
 ) => Snapshot<State>
 
 // required React >= 18:
 export const snapshotHookCreator = <State extends S>(
   store: Store<State>,
-): UseSnapshot<State> => (getSnapshot) =>
-  useSyncExternalStore(store.subscribe, () => getSnapshot(store.getState()))
+): UseSnapshot<State> => (stateFieldName) => {
+  const selector = useCallback((state: State) => state[stateFieldName], [
+    stateFieldName,
+  ])
+
+  return useSyncExternalStore(store.subscribe, () => selector(store.getState()))
+}
 
 // for React < 18:
 export const snapshot17HookCreator = <State extends S>(
   store: Store<State>,
-): UseSnapshot<State> => (getSnapshot) => {
+): UseSnapshot<State> => (stateFieldName) => {
+  const selector = useCallback((state: State) => state[stateFieldName], [
+    stateFieldName,
+  ])
+
   const [snapshot, setSnapshot] = useState<Snapshot<State>>(
-    getSnapshot(store.getState()),
+    selector(store.getState()),
   )
 
-  useEffect(
-    () =>
-      store.subscribe((currentState) => setSnapshot(getSnapshot(currentState))),
-    [getSnapshot],
-  )
+  useEffect(() => store.subscribe((state) => setSnapshot(selector(state))), [
+    selector,
+  ])
 
   return snapshot
 }

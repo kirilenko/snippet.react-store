@@ -7,7 +7,7 @@ type CountProps = {
 }
 
 export const Count: FC<CountProps> = ({ stateFieldName }) => {
-  const count = useSnapshot17((state) => state[stateFieldName])
+  const count = useSnapshot17(stateFieldName)
 
   // eslint-disable-next-line no-console
   console.log(

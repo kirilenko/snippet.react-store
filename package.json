@@ -1,6 +1,6 @@
 {
   "name": "snippet.react-store",
-  "description": "A Vite template for React apps with TypeScript, ESLint, Prettier, and React",
+  "description": "React store snippet",
   "author": "Kirilenko",
   "license": "MIT",
   "private": true,

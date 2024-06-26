@@ -12,9 +12,7 @@ export const Count: FC<CountProps> = ({ stateFieldName }) => {
   return (
     <div className="m-4">
       {stateFieldName}:{' '}
-      <span className="text-blue-500">
-        {useSnapshot((state) => state[stateFieldName])}
-      </span>
+      <span className="text-blue-500">{useSnapshot(stateFieldName)}</span>
     </div>
   )
 }
