@@ -11,7 +11,7 @@ export const Count: FC<CountProps> = ({ stateFieldName }) => {
 
   // eslint-disable-next-line no-console
   console.log(
-    '%c• StoreCounters.Count.render:',
+    '%c• StoreCountersBeforeReact18.Count.render:',
     'color: yellow',
     stateFieldName,
   )

@@ -14,7 +14,7 @@ export const IncrementButton: FC<IncrementButtonProps> = ({
 
   return (
     <button
-      className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+      className="rounded bg-cyan-500 px-4 py-2 font-bold text-white hover:bg-cyan-700"
       onClick={() => {
         increase(stateFieldName)
       }}
